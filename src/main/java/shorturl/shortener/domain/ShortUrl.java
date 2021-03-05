@@ -7,22 +7,31 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class ShortURL {
+public class ShortUrl {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
+    @Column(nullable = false)
     private String originUrl;
 
     @Column
     private String shortUrl;
 
-    @Column
-    private int requestCount;
+    @Column(nullable = false)
+    private long requestCount;
 
-    protected ShortURL() {}
+    public ShortUrl(final String originUrl, final long requestCount) {
+        this.originUrl = originUrl;
+        this.requestCount = requestCount;
+    }
+
+    protected ShortUrl() {}
+
+    public void updateShortUrl(final String shortenUrl) {
+        this.shortUrl = shortenUrl;
+    }
 
     public Long getId() {
         return id;
@@ -36,7 +45,7 @@ public class ShortURL {
         return shortUrl;
     }
 
-    public int getRequestCount() {
+    public long getRequestCount() {
         return requestCount;
     }
 }
