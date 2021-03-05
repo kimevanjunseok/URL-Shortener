@@ -1,12 +1,14 @@
 package shorturl.shortener.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import shorturl.shortener.domain.ShortUrl;
 import shorturl.shortener.dto.ShortUrlRequest;
 import shorturl.shortener.dto.ShortUrlResponse;
 import shorturl.shortener.repository.ShortUrlRepository;
 
+@Transactional
 @Service
 public class ShortUrlService {
 
@@ -22,6 +24,12 @@ public class ShortUrlService {
         final ShortUrl shortUrl = shortURLRepository.save(new ShortUrl(shortUrlRequest.getUrl(), 1L));
         final String shortenUrl = urlEncoder.encoding(shortUrl.getId());
         shortUrl.updateShortUrl(shortenUrl);
-        return ShortUrlResponse.of(shortenUrl);
+        return ShortUrlResponse.of(shortUrl);
+    }
+
+    public ShortUrlResponse findByShortUrl(final String inputShortUrl) {
+        final ShortUrl shortUrl =  shortURLRepository.findByShortUrl(inputShortUrl)
+                .orElseThrow(IllegalArgumentException::new);
+        return ShortUrlResponse.of(shortUrl);
     }
 }
