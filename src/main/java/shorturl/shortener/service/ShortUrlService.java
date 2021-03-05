@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import shorturl.shortener.domain.ShortUrl;
 import shorturl.shortener.dto.ShortUrlRequest;
 import shorturl.shortener.dto.ShortUrlResponse;
+import shorturl.shortener.exception.URLNotFoundException;
 import shorturl.shortener.repository.ShortUrlRepository;
 
 @Transactional
@@ -27,6 +28,7 @@ public class ShortUrlService {
         if (existUrl.isPresent()) {
             return ShortUrlResponse.of(existUrl.get());
         }
+
         final ShortUrl shortUrl = shortURLRepository.save(new ShortUrl(shortUrlRequest.getUrl(), 1L));
         final String shortenUrl = urlEncoder.encoding(shortUrl.getId());
         shortUrl.updateShortUrl(shortenUrl);
@@ -35,7 +37,7 @@ public class ShortUrlService {
 
     public ShortUrlResponse findByShortUrl(final String inputShortUrl) {
         final ShortUrl shortUrl =  shortURLRepository.findByShortUrl(inputShortUrl)
-                .orElseThrow(IllegalArgumentException::new);
+                .orElseThrow(() -> new URLNotFoundException("해당 URL은 존재하지 않습니다. url: " + inputShortUrl));
         return ShortUrlResponse.of(shortUrl);
     }
 }
