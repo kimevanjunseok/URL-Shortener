@@ -9,4 +9,6 @@ import shorturl.shortener.domain.ShortUrl;
 public interface ShortUrlRepository extends JpaRepository<ShortUrl, Long> {
 
     Optional<ShortUrl> findByShortUrl(final String shortUrl);
+
+    Optional<ShortUrl> findByOriginUrl(final String originUrl);
 }

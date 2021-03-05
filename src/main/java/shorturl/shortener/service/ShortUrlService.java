@@ -1,5 +1,7 @@
 package shorturl.shortener.service;
 
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +23,10 @@ public class ShortUrlService {
     }
 
     public ShortUrlResponse create(final ShortUrlRequest shortUrlRequest) {
+        final Optional<ShortUrl> existUrl = shortURLRepository.findByOriginUrl(shortUrlRequest.getUrl());
+        if (existUrl.isPresent()) {
+            return ShortUrlResponse.of(existUrl.get());
+        }
         final ShortUrl shortUrl = shortURLRepository.save(new ShortUrl(shortUrlRequest.getUrl(), 1L));
         final String shortenUrl = urlEncoder.encoding(shortUrl.getId());
         shortUrl.updateShortUrl(shortenUrl);
