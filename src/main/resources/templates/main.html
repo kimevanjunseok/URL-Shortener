@@ -5,19 +5,23 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="/css/app/main.css">
-    <link rel="stylesheet" href="/css/lib/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/app/main.css">
+    <link rel="stylesheet" type="text/css" href="/css/lib/bootstrap.min.css">
     <title>Shortener</title>
 </head>
 <body>
     <div class="container">
         <h1 class="main-title">Shortener</h1>
-        <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="URL" aria-label="URL" aria-describedby="button-addon">
-            <button class="btn btn-outline-success" type="button" id="button-addon">Button</button>
+        <div class="input-group input-group-lg mb-3">
+            <input type="text" class="form-control" id="origin-url-input" placeholder="URL" aria-label="URL" aria-describedby="shorten-btn">
+            <button class="btn btn-outline-success" type="button" id="shorten-btn">Button</button>
+        </div>
+        <div id="short-url">
+
         </div>
     </div>
 
+    <script type="module" src="/js/app/views/shortUrl.js"></script>
     <script src="/js/lib/bootstrap.min.js"></script>
 </body>
 </html>

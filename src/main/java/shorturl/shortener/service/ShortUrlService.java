@@ -17,6 +17,7 @@ public class ShortUrlService {
 
     private final ShortUrlRepository shortURLRepository;
     private final UrlEncoder urlEncoder;
+    private final String URL = "http://localhost:8080/";
 
     public ShortUrlService(final ShortUrlRepository shortURLRepository, final UrlEncoder urlEncoder) {
         this.shortURLRepository = shortURLRepository;
@@ -31,12 +32,12 @@ public class ShortUrlService {
 
         final ShortUrl shortUrl = shortURLRepository.save(new ShortUrl(shortUrlRequest.getUrl(), 1L));
         final String shortenUrl = urlEncoder.encoding(shortUrl.getId());
-        shortUrl.updateShortUrl(shortenUrl);
+        shortUrl.updateShortUrl(URL + shortenUrl);
         return ShortUrlResponse.of(shortUrl);
     }
 
     public ShortUrlResponse findByShortUrl(final String inputShortUrl) {
-        final ShortUrl shortUrl =  shortURLRepository.findByShortUrl(inputShortUrl)
+        final ShortUrl shortUrl =  shortURLRepository.findByShortUrl(URL + inputShortUrl)
                 .orElseThrow(() -> new URLNotFoundException("해당 URL은 존재하지 않습니다. url: " + inputShortUrl));
         return ShortUrlResponse.of(shortUrl);
     }
