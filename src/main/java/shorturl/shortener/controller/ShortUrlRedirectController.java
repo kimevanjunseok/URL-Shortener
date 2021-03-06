@@ -16,6 +16,11 @@ public class ShortUrlRedirectController {
         this.shortUrlService = shortUrlService;
     }
 
+    @GetMapping("/")
+    public String main() {
+        return "main";
+    }
+
     @GetMapping("/{shortUrl}")
     public String shortUrl(@PathVariable String shortUrl) {
         final ShortUrlResponse shortUrlResponse = shortUrlService.findByShortUrl(shortUrl);
