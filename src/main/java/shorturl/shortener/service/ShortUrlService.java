@@ -30,7 +30,7 @@ public class ShortUrlService {
             return ShortUrlResponse.of(existUrl.get());
         }
 
-        final ShortUrl shortUrl = shortURLRepository.save(new ShortUrl(shortUrlRequest.getUrl(), 1L));
+        final ShortUrl shortUrl = shortURLRepository.save(new ShortUrl(shortUrlRequest.getUrl(), null, 1L));
         final String shortenUrl = urlEncoder.encoding(shortUrl.getId());
         shortUrl.updateShortUrl(URL + shortenUrl);
         return ShortUrlResponse.of(shortUrl);

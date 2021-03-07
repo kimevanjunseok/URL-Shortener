@@ -21,7 +21,7 @@ public class ShortUrlRedirectController {
         return "main";
     }
 
-    @GetMapping("/{shortUrl}")
+    @GetMapping("/{shortUrl:[A-Za-z0-9]+}")
     public String shortUrl(@PathVariable String shortUrl) {
         final ShortUrlResponse shortUrlResponse = shortUrlService.findByShortUrl(shortUrl);
         return "redirect:" + shortUrlResponse.getOriginUrl();

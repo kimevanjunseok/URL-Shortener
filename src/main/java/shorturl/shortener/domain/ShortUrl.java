@@ -22,8 +22,9 @@ public class ShortUrl {
     @Column(nullable = false)
     private long requestCount;
 
-    public ShortUrl(final String originUrl, final long requestCount) {
+    public ShortUrl(final String originUrl, final String shortUrl, final long requestCount) {
         this.originUrl = originUrl;
+        this.shortUrl = shortUrl;
         this.requestCount = requestCount;
     }
 
