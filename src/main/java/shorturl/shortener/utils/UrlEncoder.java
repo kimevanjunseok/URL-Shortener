@@ -5,8 +5,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class UrlEncoder {
 
-    private final int RADIX = 62;
-    private final String BASE62 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    private static final int RADIX = 62;
+    private static final String BASE62 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
     public String encoding(long param) {
         final StringBuilder builder = new StringBuilder();
