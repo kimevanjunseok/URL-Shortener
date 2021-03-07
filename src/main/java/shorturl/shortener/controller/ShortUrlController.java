@@ -2,6 +2,8 @@ package shorturl.shortener.controller;
 
 import java.net.URI;
 
+import javax.validation.Valid;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,7 +26,7 @@ public class ShortUrlController {
     }
 
     @PostMapping
-    public ResponseEntity<ShortUrlResponse> create(@RequestBody ShortUrlRequest shortUrlRequest) {
+    public ResponseEntity<ShortUrlResponse> create(@RequestBody @Valid final ShortUrlRequest shortUrlRequest) {
         final ShortUrlResponse shortUrlResponse = shortURLService.create(shortUrlRequest);
         return ResponseEntity.created(URI.create("/api/v1/short-url/" + shortUrlResponse.getShortUrl())).body(shortUrlResponse);
     }

@@ -1,5 +1,6 @@
 package shorturl.shortener.controller;
 
+import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
@@ -33,6 +34,28 @@ class ShortUrlControllerTest extends ControllerTest {
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.shortUrl", Is.is(shortUrlResponse.getShortUrl())))
+                .andDo(print());
+    }
+
+    @DisplayName("create: 빈 URL 요청이 올 때 예외 처리")
+    @Test
+    void create_ShortUrlRequest_NotBlankValidation_Exception() throws Exception {
+        this.mockMvc.perform(post("/api/v1/short-url")
+                .content("{\"url\": \"\"}")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(containsString("올바른 형식의 요청이 아닙니다.")))
+                .andDo(print());
+    }
+
+    @DisplayName("create: 잘못된 URL 형식의 요청이 올 때 예외 처리")
+    @Test
+    void create_ShortUrlRequest_URLValidation_Exception() throws Exception {
+        this.mockMvc.perform(post("/api/v1/short-url")
+                .content("{\"url\": \"NotURL\"}")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(containsString("올바른 형식의 요청이 아닙니다.")))
                 .andDo(print());
     }
 }
