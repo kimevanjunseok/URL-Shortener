@@ -30,7 +30,9 @@ public class ShortUrlService {
     public ShortUrlResponse create(final ShortUrlRequest shortUrlRequest) {
         final Optional<ShortUrl> existUrl = shortURLRepository.findByOriginUrl(shortUrlRequest.getUrl());
         if (existUrl.isPresent()) {
-            return ShortUrlResponse.of(existUrl.get());
+            final ShortUrl shortUrl = existUrl.get();
+            shortUrl.addCount();
+            return ShortUrlResponse.of(shortUrl);
         }
 
         final ShortUrl shortUrl = shortURLRepository.save(new ShortUrl(shortUrlRequest.getUrl(), null, 1L));

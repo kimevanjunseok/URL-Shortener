@@ -62,6 +62,25 @@ class ShortUrlServiceTest {
         );
     }
 
+    @DisplayName("create: 기존에 만든 URL에 대한 요청 수를 계산한다.")
+    @Test
+    void create_AddCount() {
+        // given
+        final ShortUrlRequest shortUrlRequest = new ShortUrlRequest("https://www.google.com");
+
+        // when
+        shortUrlService.create(shortUrlRequest);
+        shortUrlService.create(shortUrlRequest);
+        shortUrlService.create(shortUrlRequest);
+        final ShortUrlResponse lastResponse = shortUrlService.create(shortUrlRequest);
+
+        // then
+        assertAll(
+                () -> assertThat(lastResponse.getOriginUrl()).isEqualTo("https://www.google.com"),
+                () -> assertThat(lastResponse.getRequestCount()).isEqualTo(4L)
+        );
+    }
+
     @DisplayName("findByShortUrl: 짧게 만든 URL을 입력하면 해당")
     @Test
     void findByShortUrl() {
