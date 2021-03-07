@@ -29,7 +29,7 @@ public class ShortUrlService {
         final Optional<ShortUrl> existUrl = shortURLRepository.findByOriginUrl(shortUrlRequest.getUrl());
         if (existUrl.isPresent()) {
             final ShortUrl shortUrl = existUrl.get();
-            shortUrl.addCount();
+            shortUrl.addRequestCount();
             return ShortUrlResponse.of(shortUrl);
         }
 

@@ -31,6 +31,8 @@ public class ShortUrl {
     @Column(nullable = false)
     private long requestCount;
 
+    protected ShortUrl() {}
+
     public ShortUrl(final String originUrl, final String shortUrl, final long requestCount) {
         validateShortUrlLength(shortUrl);
         this.originUrl = originUrl;
@@ -44,14 +46,12 @@ public class ShortUrl {
         }
     }
 
-    protected ShortUrl() {}
-
     public void updateShortUrl(final String shortenUrl) {
         validateShortUrlLength(shortenUrl);
         this.shortUrl = shortenUrl;
     }
 
-    public void addCount() {
+    public void addRequestCount() {
         this.requestCount += 1;
     }
 
