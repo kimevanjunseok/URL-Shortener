@@ -20,8 +20,6 @@ import shorturl.shortener.repository.ShortUrlRepository;
 @SpringBootTest
 class ShortUrlServiceTest {
 
-    private static final String URL = "http://localhost:8080/";
-
     @Autowired
     private ShortUrlService shortUrlService;
 
@@ -85,7 +83,7 @@ class ShortUrlServiceTest {
     @Test
     void findByShortUrl() {
         // given
-        shortUrlRepository.save(new ShortUrl("https://www.naver.com/", URL + "B1Az9c",1L));
+        shortUrlRepository.save(new ShortUrl("https://www.naver.com/", "B1Az9c",1L));
 
         // when
         final OriginUrlResponse originUrlResponse = shortUrlService.findByShortUrl("B1Az9c");

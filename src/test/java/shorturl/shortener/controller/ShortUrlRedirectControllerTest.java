@@ -33,7 +33,7 @@ class ShortUrlRedirectControllerTest extends ControllerTest {
     @Test
     void shortUrl() throws Exception {
         final OriginUrlResponse originUrlResponse = OriginUrlResponse.of(
-                new ShortUrl("https://www.naver.com/", URL + "B1Az9c",1L));
+                new ShortUrl("https://www.naver.com/", "B1Az9c",1L));
         when(shortUrlService.findByShortUrl(any())).thenReturn(originUrlResponse);
 
         this.mockMvc.perform(get("/{shortUrl}", "B1Az9c"))

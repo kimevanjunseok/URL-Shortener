@@ -26,7 +26,7 @@ class ShortUrlControllerTest extends ControllerTest {
     @Test
     void create() throws Exception {
         final ShortUrlResponse shortUrlResponse = ShortUrlResponse.of(
-                new ShortUrl("https://www.naver.com/", URL + "B1Az9c",1L));
+                new ShortUrl("https://www.naver.com/", "B1Az9c",1L));
         when(shortUrlService.create(any())).thenReturn(shortUrlResponse);
 
         this.mockMvc.perform(post("/api/v1/short-url")

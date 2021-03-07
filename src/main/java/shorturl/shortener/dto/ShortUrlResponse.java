@@ -14,8 +14,8 @@ public class ShortUrlResponse {
         this.requestCount = requestCount;
     }
 
-    public static ShortUrlResponse of(final ShortUrl shortenUrl) {
-        return new ShortUrlResponse(shortenUrl.getOriginUrl(), shortenUrl.getShortUrl(), shortenUrl.getRequestCount());
+    public static ShortUrlResponse of(final ShortUrl shortUrl) {
+        return new ShortUrlResponse(shortUrl.getOriginUrl(), shortUrl.getFullShortUrl(), shortUrl.getRequestCount());
     }
 
     public String getOriginUrl() {

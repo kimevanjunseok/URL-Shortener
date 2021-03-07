@@ -17,8 +17,6 @@ import shorturl.shortener.utils.UrlEncoder;
 @Service
 public class ShortUrlService {
 
-    private static final String URL = "http://localhost:8080/";
-
     private final ShortUrlRepository shortURLRepository;
     private final UrlEncoder urlEncoder;
 
@@ -37,12 +35,12 @@ public class ShortUrlService {
 
         final ShortUrl shortUrl = shortURLRepository.save(new ShortUrl(shortUrlRequest.getUrl(), null, 1L));
         final String shortenUrl = urlEncoder.encoding(shortUrl.getId());
-        shortUrl.updateShortUrl(URL + shortenUrl);
+        shortUrl.updateShortUrl(shortenUrl);
         return ShortUrlResponse.of(shortUrl);
     }
 
     public OriginUrlResponse findByShortUrl(final String inputShortUrl) {
-        final ShortUrl shortUrl =  shortURLRepository.findByShortUrl(URL + inputShortUrl)
+        final ShortUrl shortUrl =  shortURLRepository.findByShortUrl(inputShortUrl)
                 .orElseThrow(() -> new URLNotFoundException("해당 URL은 존재하지 않습니다. url: " + inputShortUrl));
         return OriginUrlResponse.of(shortUrl);
     }

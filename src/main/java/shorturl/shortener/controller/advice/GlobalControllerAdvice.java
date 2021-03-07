@@ -6,6 +6,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import shorturl.shortener.exception.ShortUrlOutOfLengthException;
 import shorturl.shortener.exception.URLNotFoundException;
 
 @RestControllerAdvice
@@ -18,7 +19,12 @@ public class GlobalControllerAdvice {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<String> handleValidationExceptions() {
-        return ResponseEntity.badRequest().body("올바른 형식의 요청이 아닙니다.");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("올바른 형식의 요청이 아닙니다.");
+    }
+
+    @ExceptionHandler(ShortUrlOutOfLengthException.class)
+    public ResponseEntity<String> handleShortUrlOutOfLengthException() {
+        return ResponseEntity.status(HttpStatus.NOT_EXTENDED).body("URL 길이에 대한 확장이 필요합니다.");
     }
 
     @ExceptionHandler(Exception.class)

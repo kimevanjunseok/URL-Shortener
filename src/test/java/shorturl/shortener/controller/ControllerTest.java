@@ -7,8 +7,6 @@ import org.springframework.test.web.servlet.MockMvc;
 @WebMvcTest
 class ControllerTest {
 
-    protected static final String URL = "http://localhost:8080/";
-
     @Autowired
     protected MockMvc mockMvc;
 }
