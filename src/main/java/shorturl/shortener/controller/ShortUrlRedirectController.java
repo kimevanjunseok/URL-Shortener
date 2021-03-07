@@ -4,7 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import shorturl.shortener.dto.ShortUrlResponse;
+import shorturl.shortener.dto.OriginUrlResponse;
 import shorturl.shortener.service.ShortUrlService;
 
 @Controller
@@ -23,7 +23,7 @@ public class ShortUrlRedirectController {
 
     @GetMapping("/{shortUrl:[A-Za-z0-9]+}")
     public String shortUrl(@PathVariable String shortUrl) {
-        final ShortUrlResponse shortUrlResponse = shortUrlService.findByShortUrl(shortUrl);
-        return "redirect:" + shortUrlResponse.getOriginUrl();
+        final OriginUrlResponse originUrlResponse = shortUrlService.findByShortUrl(shortUrl);
+        return "redirect:" + originUrlResponse.getOriginUrl();
     }
 }

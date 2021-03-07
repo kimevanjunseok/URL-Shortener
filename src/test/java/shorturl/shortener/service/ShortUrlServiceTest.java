@@ -9,15 +9,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import shorturl.shortener.domain.ShortUrl;
+import shorturl.shortener.dto.OriginUrlResponse;
 import shorturl.shortener.dto.ShortUrlRequest;
 import shorturl.shortener.dto.ShortUrlResponse;
+import shorturl.shortener.exception.URLNotFoundException;
+import shorturl.shortener.repository.ShortUrlRepository;
 
 @Transactional
 @SpringBootTest
 class ShortUrlServiceTest {
 
+    private static final String URL = "http://localhost:8080/";
+
     @Autowired
     private ShortUrlService shortUrlService;
+
+    @Autowired
+    private ShortUrlRepository shortUrlRepository;
 
     @DisplayName("create: url을 입력하면 짧게 만들어 준다.")
     @Test
@@ -51,5 +60,28 @@ class ShortUrlServiceTest {
                 () -> assertThat(secondShortUrlResponse.getOriginUrl()).isEqualTo("https://www.google.com"),
                 () -> assertThat(firstShortUrlResponse.getShortUrl()).isEqualTo(secondShortUrlResponse.getShortUrl())
         );
+    }
+
+    @DisplayName("findByShortUrl: 짧게 만든 URL을 입력하면 해당")
+    @Test
+    void findByShortUrl() {
+        // given
+        shortUrlRepository.save(new ShortUrl("https://www.naver.com/", URL + "B1Az9c",1L));
+
+        // when
+        final OriginUrlResponse originUrlResponse = shortUrlService.findByShortUrl("B1Az9c");
+
+        // than
+        assertThat(originUrlResponse.getOriginUrl()).isEqualTo("https://www.naver.com/");
+    }
+
+    @DisplayName("findByShortUrl: 짧게 만든 URL이 존재하지 않을 때 예외 처리")
+    @Test
+    void findByShortUrl_URLNotFoundException() {
+        // when then
+        assertThatThrownBy(
+                () -> shortUrlService.findByShortUrl("Am3Zd")
+        ).isInstanceOf(URLNotFoundException.class)
+        .hasMessageContaining("해당 URL은 존재하지 않습니다.");
     }
 }

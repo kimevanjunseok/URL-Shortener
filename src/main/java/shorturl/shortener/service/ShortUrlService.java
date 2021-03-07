@@ -6,10 +6,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import shorturl.shortener.domain.ShortUrl;
+import shorturl.shortener.dto.OriginUrlResponse;
 import shorturl.shortener.dto.ShortUrlRequest;
 import shorturl.shortener.dto.ShortUrlResponse;
 import shorturl.shortener.exception.URLNotFoundException;
 import shorturl.shortener.repository.ShortUrlRepository;
+import shorturl.shortener.utils.UrlEncoder;
 
 @Transactional
 @Service
@@ -37,9 +39,9 @@ public class ShortUrlService {
         return ShortUrlResponse.of(shortUrl);
     }
 
-    public ShortUrlResponse findByShortUrl(final String inputShortUrl) {
+    public OriginUrlResponse findByShortUrl(final String inputShortUrl) {
         final ShortUrl shortUrl =  shortURLRepository.findByShortUrl(URL + inputShortUrl)
                 .orElseThrow(() -> new URLNotFoundException("해당 URL은 존재하지 않습니다. url: " + inputShortUrl));
-        return ShortUrlResponse.of(shortUrl);
+        return OriginUrlResponse.of(shortUrl);
     }
 }

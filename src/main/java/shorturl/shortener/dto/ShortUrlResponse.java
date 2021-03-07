@@ -4,8 +4,8 @@ import shorturl.shortener.domain.ShortUrl;
 
 public class ShortUrlResponse {
 
-    private String originUrl;
-    private String shortUrl;
+    private final String originUrl;
+    private final String shortUrl;
 
     private ShortUrlResponse(final String originUrl, final String shortUrl) {
         this.originUrl = originUrl;
