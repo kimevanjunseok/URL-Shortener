@@ -15,9 +15,10 @@ import shorturl.shortener.repository.ShortUrlRepository;
 @Service
 public class ShortUrlService {
 
+    private static final String URL = "http://localhost:8080/";
+
     private final ShortUrlRepository shortURLRepository;
     private final UrlEncoder urlEncoder;
-    private final String URL = "http://localhost:8080/";
 
     public ShortUrlService(final ShortUrlRepository shortURLRepository, final UrlEncoder urlEncoder) {
         this.shortURLRepository = shortURLRepository;

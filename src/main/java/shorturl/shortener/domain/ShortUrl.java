@@ -5,8 +5,13 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Index;
+import javax.persistence.Table;
 
 @Entity
+@Table(indexes = {
+        @Index(name = "short_url_origin_url_idx", columnList = "originUrl"),
+        @Index(name="short_url_short_url_idx", columnList = "shortUrl")})
 public class ShortUrl {
 
     @Id
