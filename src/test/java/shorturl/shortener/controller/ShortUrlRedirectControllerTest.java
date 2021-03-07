@@ -20,6 +20,7 @@ class ShortUrlRedirectControllerTest extends ControllerTest {
     @MockBean
     private ShortUrlService shortUrlService;
 
+    @DisplayName("main: main page 요청에 대한 응답")
     @Test
     void main() throws Exception {
         this.mockMvc.perform(get("/"))
