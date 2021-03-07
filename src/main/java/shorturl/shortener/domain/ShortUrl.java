@@ -6,6 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Index;
+import javax.persistence.Lob;
 import javax.persistence.Table;
 
 import shorturl.shortener.exception.ShortUrlOutOfLengthException;
@@ -22,10 +23,10 @@ public class ShortUrl {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 2000)
     private String originUrl;
 
-    @Column
+    @Column(length = 8)
     private String shortUrl;
 
     @Column(nullable = false)

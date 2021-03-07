@@ -83,10 +83,10 @@ class ShortUrlServiceTest {
     @Test
     void findByShortUrl() {
         // given
-        shortUrlRepository.save(new ShortUrl("https://www.naver.com/", "B1Az9c",1L));
+        shortUrlRepository.save(new ShortUrl("https://www.naver.com/", "B1Az9cZP",1L));
 
         // when
-        final OriginUrlResponse originUrlResponse = shortUrlService.findByShortUrl("B1Az9c");
+        final OriginUrlResponse originUrlResponse = shortUrlService.findByShortUrl("B1Az9cZP");
 
         // than
         assertThat(originUrlResponse.getOriginUrl()).isEqualTo("https://www.naver.com/");
