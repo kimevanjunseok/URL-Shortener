@@ -27,6 +27,6 @@ public class ShortUrlController {
     @PostMapping
     public ResponseEntity<ShortUrlResponse> create(@RequestBody @Valid final ShortUrlRequest shortUrlRequest) {
         final ShortUrlResponse shortUrlResponse = shortURLService.create(shortUrlRequest);
-        return ResponseEntity.created(URI.create("/api/v1/short-url/" + shortUrlResponse.getShortUrl())).body(shortUrlResponse);
+        return ResponseEntity.created(URI.create("/api/v1/short-url/" + shortUrlResponse.getId())).body(shortUrlResponse);
     }
 }

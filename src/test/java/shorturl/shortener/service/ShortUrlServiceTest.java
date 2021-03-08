@@ -37,7 +37,8 @@ class ShortUrlServiceTest {
 
         // than
         assertAll(
-                () -> assertThat(shortUrlResponse.getOriginUrl()).isEqualTo("https://www.google.com/"),
+                () -> assertThat(shortUrlResponse.getId()).isNotNull(),
+                () -> assertThat(shortUrlResponse.getOriginUrl()).isEqualTo(shortUrlRequest.getUrl()),
                 () -> assertThat(shortUrlResponse.getShortUrl()).isNotNull()
         );
     }
@@ -54,8 +55,8 @@ class ShortUrlServiceTest {
 
         // than
         assertAll(
-                () -> assertThat(firstShortUrlResponse.getOriginUrl()).isEqualTo("https://www.google.com"),
-                () -> assertThat(secondShortUrlResponse.getOriginUrl()).isEqualTo("https://www.google.com"),
+                () -> assertThat(firstShortUrlResponse.getOriginUrl()).isEqualTo(shortUrlRequest.getUrl()),
+                () -> assertThat(secondShortUrlResponse.getOriginUrl()).isEqualTo(shortUrlRequest.getUrl()),
                 () -> assertThat(firstShortUrlResponse.getShortUrl()).isEqualTo(secondShortUrlResponse.getShortUrl())
         );
     }
@@ -74,7 +75,7 @@ class ShortUrlServiceTest {
 
         // then
         assertAll(
-                () -> assertThat(lastResponse.getOriginUrl()).isEqualTo("https://www.google.com"),
+                () -> assertThat(lastResponse.getOriginUrl()).isEqualTo(shortUrlRequest.getUrl()),
                 () -> assertThat(lastResponse.getRequestCount()).isEqualTo(4L)
         );
     }
@@ -83,13 +84,13 @@ class ShortUrlServiceTest {
     @Test
     void findByShortUrl() {
         // given
-        shortUrlRepository.save(new ShortUrl("https://www.naver.com/", "B1Az9cZP",1L));
+        final ShortUrl shortUrl = shortUrlRepository.save(new ShortUrl("https://www.naver.com/", "B1Az9cZP", 1L));
 
         // when
-        final OriginUrlResponse originUrlResponse = shortUrlService.findByShortUrl("B1Az9cZP");
+        final OriginUrlResponse originUrlResponse = shortUrlService.findByShortUrl(shortUrl.getShortUrl());
 
         // than
-        assertThat(originUrlResponse.getOriginUrl()).isEqualTo("https://www.naver.com/");
+        assertThat(originUrlResponse.getOriginUrl()).isEqualTo(shortUrl.getOriginUrl());
     }
 
     @DisplayName("findByShortUrl: 짧게 만든 URL이 존재하지 않을 때 예외 처리")
