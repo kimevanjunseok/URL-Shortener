@@ -92,6 +92,25 @@ class ShortUrlServiceTest extends ServiceTest {
         assertThat(originUrlResponse.getOriginUrl()).isEqualTo(shortUrl.getOriginUrl());
     }
 
+    @DisplayName("findByShortUrl: URL에 대한 요청 수를 계산한다.")
+    @Test
+    void findByShortUrl_AddCount() {
+        // given
+        final ShortUrl shortUrl = shortUrlRepository.save(new ShortUrl("https://www.naver.com/", "B1Az9cZP", 1L));
+
+        // when
+        shortUrlService.findByShortUrl(shortUrl.getShortUrl());
+        shortUrlService.findByShortUrl(shortUrl.getShortUrl());
+        shortUrlService.findByShortUrl(shortUrl.getShortUrl());
+
+        // than
+        ShortUrl actual = shortUrlRepository.findByOriginUrl(shortUrl.getOriginUrl()).get();
+        assertAll(
+                () -> assertThat(actual.getOriginUrl()).isEqualTo(shortUrl.getOriginUrl()),
+                () -> assertThat(actual.getRequestCount()).isEqualTo(4L)
+        );
+    }
+
     @DisplayName("findByShortUrl: 짧게 만든 URL이 존재하지 않을 때 예외 처리")
     @Test
     void findByShortUrl_URLNotFoundException() {

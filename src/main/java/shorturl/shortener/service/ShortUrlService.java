@@ -2,6 +2,7 @@ package shorturl.shortener.service;
 
 import java.util.Optional;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,10 +40,12 @@ public class ShortUrlService {
         return ShortUrlResponse.of(shortUrl);
     }
 
+    @Cacheable(value = "shortUrl")
     @Transactional(readOnly = true)
     public OriginUrlResponse findByShortUrl(final String inputShortUrl) {
         final ShortUrl shortUrl =  shortURLRepository.findByShortUrl(inputShortUrl)
                 .orElseThrow(() -> new URLNotFoundException("해당 URL은 존재하지 않습니다. url: " + inputShortUrl));
+        shortUrl.addRequestCount();
         return OriginUrlResponse.of(shortUrl);
     }
 }
