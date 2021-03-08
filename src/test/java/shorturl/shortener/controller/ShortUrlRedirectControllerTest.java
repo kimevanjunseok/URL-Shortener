@@ -23,10 +23,7 @@ class ShortUrlRedirectControllerTest extends ControllerTest {
     @DisplayName("main: main page 요청에 대한 응답")
     @Test
     void main() throws Exception {
-        this.mockMvc.perform(get("/"))
-                .andExpect(status().isOk())
-                .andExpect(content().string(containsString("Shortener")))
-                .andDo(print());
+        page("/", status().isOk(), content().string(containsString("Shortener")));
     }
 
     @DisplayName("shortUrl: 짧게 줄인 URL으로 요청을 보내면 원래 URL로 Redirect 한다.")
@@ -36,9 +33,6 @@ class ShortUrlRedirectControllerTest extends ControllerTest {
                 new ShortUrl("https://www.naver.com/", "B1Az9c",1L));
         when(shortUrlService.findByShortUrl(any())).thenReturn(originUrlResponse);
 
-        this.mockMvc.perform(get("/{shortUrl}", "B1Az9c"))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(header().string("Location", "https://www.naver.com/"))
-                .andDo(print());
+        redirectByPathVariable("/{shortUrl}", "B1Az9c", header().string("Location", "https://www.naver.com/"));
     }
 }

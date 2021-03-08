@@ -6,8 +6,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.context.annotation.Import;
 
 import shorturl.shortener.domain.ShortUrl;
 import shorturl.shortener.dto.OriginUrlResponse;
@@ -15,10 +14,10 @@ import shorturl.shortener.dto.ShortUrlRequest;
 import shorturl.shortener.dto.ShortUrlResponse;
 import shorturl.shortener.exception.URLNotFoundException;
 import shorturl.shortener.repository.ShortUrlRepository;
+import shorturl.shortener.utils.UrlEncoder;
 
-@Transactional
-@SpringBootTest
-class ShortUrlServiceTest {
+@Import(value = {ShortUrlService.class, UrlEncoder.class})
+class ShortUrlServiceTest extends ServiceTest {
 
     @Autowired
     private ShortUrlService shortUrlService;

@@ -39,6 +39,7 @@ public class ShortUrlService {
         return ShortUrlResponse.of(shortUrl);
     }
 
+    @Transactional(readOnly = true)
     public OriginUrlResponse findByShortUrl(final String inputShortUrl) {
         final ShortUrl shortUrl =  shortURLRepository.findByShortUrl(inputShortUrl)
                 .orElseThrow(() -> new URLNotFoundException("해당 URL은 존재하지 않습니다. url: " + inputShortUrl));
