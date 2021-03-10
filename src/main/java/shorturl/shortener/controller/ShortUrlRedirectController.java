@@ -23,7 +23,7 @@ public class ShortUrlRedirectController {
 
     @GetMapping("/{shortUrl:[A-Za-z0-9]+}")
     public String shortUrl(@PathVariable final String shortUrl) {
-        final OriginUrlResponse originUrlResponse = shortUrlService.findByShortUrl(shortUrl);
+        final OriginUrlResponse originUrlResponse = shortUrlService.findOriginUrlByShortUrl(shortUrl);
         return "redirect:" + originUrlResponse.getOriginUrl();
     }
 }

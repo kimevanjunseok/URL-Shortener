@@ -30,7 +30,6 @@ public class ShortUrlService {
         final Optional<ShortUrl> existUrl = shortURLRepository.findByOriginUrl(shortUrlRequest.getUrl());
         if (existUrl.isPresent()) {
             final ShortUrl shortUrl = existUrl.get();
-            shortUrl.addRequestCount();
             return ShortUrlResponse.of(shortUrl);
         }
 
@@ -40,9 +39,10 @@ public class ShortUrlService {
         return ShortUrlResponse.of(shortUrl);
     }
 
-    @Cacheable(value = "shortUrl")
     @Transactional(readOnly = true)
-    public OriginUrlResponse findByShortUrl(final String inputShortUrl) {
+    @Cacheable(value = "shortUrl")
+    public OriginUrlResponse findOriginUrlByShortUrl(final String inputShortUrl) {
+        shortURLRepository.save(new ShortUrl("test_url", null, 1L));
         final ShortUrl shortUrl =  shortURLRepository.findByShortUrl(inputShortUrl)
                 .orElseThrow(() -> new URLNotFoundException("해당 URL은 존재하지 않습니다. url: " + inputShortUrl));
         shortUrl.addRequestCount();

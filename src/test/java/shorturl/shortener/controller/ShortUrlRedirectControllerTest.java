@@ -29,7 +29,7 @@ class ShortUrlRedirectControllerTest extends ControllerTest {
     void shortUrl() throws Exception {
         final OriginUrlResponse originUrlResponse = OriginUrlResponse.of(
                 new ShortUrl("https://www.naver.com/", "B1Az9c",1L));
-        when(shortUrlService.findByShortUrl(any())).thenReturn(originUrlResponse);
+        when(shortUrlService.findOriginUrlByShortUrl(any())).thenReturn(originUrlResponse);
 
         redirectByPathVariable("/{shortUrl}", "B1Az9c", header().string("Location", "https://www.naver.com/"));
     }

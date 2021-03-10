@@ -60,48 +60,29 @@ class ShortUrlServiceTest extends ServiceTest {
         );
     }
 
-    @DisplayName("create: 기존에 만든 URL에 대한 요청 수를 계산한다.")
+    @DisplayName("findOriginUrlByShortUrl: 짧게 만든 URL을 입력하면 해당")
     @Test
-    void create_AddCount() {
-        // given
-        final ShortUrlRequest shortUrlRequest = new ShortUrlRequest("https://www.google.com");
-
-        // when
-        shortUrlService.create(shortUrlRequest);
-        shortUrlService.create(shortUrlRequest);
-        shortUrlService.create(shortUrlRequest);
-        final ShortUrlResponse lastResponse = shortUrlService.create(shortUrlRequest);
-
-        // then
-        assertAll(
-                () -> assertThat(lastResponse.getOriginUrl()).isEqualTo(shortUrlRequest.getUrl()),
-                () -> assertThat(lastResponse.getRequestCount()).isEqualTo(4L)
-        );
-    }
-
-    @DisplayName("findByShortUrl: 짧게 만든 URL을 입력하면 해당")
-    @Test
-    void findByShortUrl() {
+    void findOriginUrlByShortUrl() {
         // given
         final ShortUrl shortUrl = shortUrlRepository.save(new ShortUrl("https://www.naver.com/", "B1Az9cZP", 1L));
 
         // when
-        final OriginUrlResponse originUrlResponse = shortUrlService.findByShortUrl(shortUrl.getShortUrl());
+        final OriginUrlResponse originUrlResponse = shortUrlService.findOriginUrlByShortUrl(shortUrl.getShortUrl());
 
         // than
         assertThat(originUrlResponse.getOriginUrl()).isEqualTo(shortUrl.getOriginUrl());
     }
 
-    @DisplayName("findByShortUrl: URL에 대한 요청 수를 계산한다.")
+    @DisplayName("findOriginUrlByShortUrl: URL에 대한 요청 수를 계산한다.")
     @Test
-    void findByShortUrl_AddCount() {
+    void findOriginUrlByShortUrl_AddCount() {
         // given
         final ShortUrl shortUrl = shortUrlRepository.save(new ShortUrl("https://www.naver.com/", "B1Az9cZP", 1L));
 
         // when
-        shortUrlService.findByShortUrl(shortUrl.getShortUrl());
-        shortUrlService.findByShortUrl(shortUrl.getShortUrl());
-        shortUrlService.findByShortUrl(shortUrl.getShortUrl());
+        shortUrlService.findOriginUrlByShortUrl(shortUrl.getShortUrl());
+        shortUrlService.findOriginUrlByShortUrl(shortUrl.getShortUrl());
+        shortUrlService.findOriginUrlByShortUrl(shortUrl.getShortUrl());
 
         // than
         ShortUrl actual = shortUrlRepository.findByOriginUrl(shortUrl.getOriginUrl()).get();
@@ -111,12 +92,12 @@ class ShortUrlServiceTest extends ServiceTest {
         );
     }
 
-    @DisplayName("findByShortUrl: 짧게 만든 URL이 존재하지 않을 때 예외 처리")
+    @DisplayName("findOriginUrlByShortUrl: 짧게 만든 URL이 존재하지 않을 때 예외 처리")
     @Test
-    void findByShortUrl_URLNotFoundException() {
+    void findOriginUrlByShortUrl_URLNotFoundException() {
         // when then
         assertThatThrownBy(
-                () -> shortUrlService.findByShortUrl("Am3Zd")
+                () -> shortUrlService.findOriginUrlByShortUrl("Am3Zd")
         ).isInstanceOf(URLNotFoundException.class)
         .hasMessageContaining("해당 URL은 존재하지 않습니다.");
     }
