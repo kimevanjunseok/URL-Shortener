@@ -1,20 +1,14 @@
 package shorturl.shortener.service;
 
-import java.util.Optional;
-
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import shorturl.shortener.domain.ShortUrl;
 import shorturl.shortener.dto.OriginUrlResponse;
 import shorturl.shortener.dto.ShortUrlRequest;
 import shorturl.shortener.dto.ShortUrlResponse;
-import shorturl.shortener.exception.URLNotFoundException;
 import shorturl.shortener.repository.ShortUrlRepository;
 import shorturl.shortener.utils.UrlEncoder;
 
-@Transactional
 @Service
 public class ShortUrlService {
 
@@ -27,25 +21,19 @@ public class ShortUrlService {
     }
 
     public ShortUrlResponse create(final ShortUrlRequest shortUrlRequest) {
-        final Optional<ShortUrl> existUrl = shortURLRepository.findByOriginUrl(shortUrlRequest.getUrl());
-        if (existUrl.isPresent()) {
-            final ShortUrl shortUrl = existUrl.get();
-            return ShortUrlResponse.of(shortUrl);
+        final ShortUrl existUrl = shortURLRepository.findByOriginUrl(shortUrlRequest.getUrl());
+        if (existUrl != null) {
+            return ShortUrlResponse.of(existUrl);
         }
 
-        final ShortUrl shortUrl = shortURLRepository.save(new ShortUrl(shortUrlRequest.getUrl(), null, 1L));
-        final String shortenUrl = urlEncoder.encoding(shortUrl.getId());
-        shortUrl.updateShortUrl(shortenUrl);
+        final long id = shortURLRepository.size() + 1L;
+        final String shortenUrl = urlEncoder.encoding(id);
+        final ShortUrl shortUrl = shortURLRepository.save(new ShortUrl(id, shortUrlRequest.getUrl(), shortenUrl));
         return ShortUrlResponse.of(shortUrl);
     }
 
-    @Transactional(readOnly = true)
-    @Cacheable(value = "shortUrl")
     public OriginUrlResponse findOriginUrlByShortUrl(final String inputShortUrl) {
-        shortURLRepository.save(new ShortUrl("test_url", null, 1L));
-        final ShortUrl shortUrl =  shortURLRepository.findByShortUrl(inputShortUrl)
-                .orElseThrow(() -> new URLNotFoundException("해당 URL은 존재하지 않습니다. url: " + inputShortUrl));
-        shortUrl.addRequestCount();
+        final ShortUrl shortUrl = shortURLRepository.findByShortUrl(inputShortUrl);
         return OriginUrlResponse.of(shortUrl);
     }
 }

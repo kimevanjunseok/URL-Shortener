@@ -1,7 +1,10 @@
 package shorturl.shortener.service;
 
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
 
-@DataJpaTest
+import shorturl.shortener.config.TestRedisConfiguration;
+
+// @DataJpaTest
+@SpringBootTest(classes = TestRedisConfiguration.class)
 class ServiceTest {
 }

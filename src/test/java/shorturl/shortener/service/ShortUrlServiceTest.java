@@ -6,17 +6,13 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Import;
 
-import shorturl.shortener.domain.ShortUrl;
 import shorturl.shortener.dto.OriginUrlResponse;
 import shorturl.shortener.dto.ShortUrlRequest;
 import shorturl.shortener.dto.ShortUrlResponse;
 import shorturl.shortener.exception.URLNotFoundException;
 import shorturl.shortener.repository.ShortUrlRepository;
-import shorturl.shortener.utils.UrlEncoder;
 
-@Import(value = {ShortUrlService.class, UrlEncoder.class})
 class ShortUrlServiceTest extends ServiceTest {
 
     @Autowired
@@ -64,33 +60,18 @@ class ShortUrlServiceTest extends ServiceTest {
     @Test
     void findOriginUrlByShortUrl() {
         // given
-        final ShortUrl shortUrl = shortUrlRepository.save(new ShortUrl("https://www.naver.com/", "B1Az9cZP", 1L));
+        final ShortUrlRequest shortUrlRequest = new ShortUrlRequest("https://www.google.com");
+        final ShortUrlResponse shortUrlResponse = shortUrlService.create(shortUrlRequest);
+        final String[] splitUrl = shortUrlResponse.getShortUrl().split("/");
+        final String shortUrl = splitUrl[splitUrl.length - 1];
 
         // when
-        final OriginUrlResponse originUrlResponse = shortUrlService.findOriginUrlByShortUrl(shortUrl.getShortUrl());
+        final OriginUrlResponse expect = shortUrlService.findOriginUrlByShortUrl(shortUrl);
 
         // than
-        assertThat(originUrlResponse.getOriginUrl()).isEqualTo(shortUrl.getOriginUrl());
+        assertThat(expect.getOriginUrl()).isEqualTo(shortUrlResponse.getOriginUrl());
     }
 
-    @DisplayName("findOriginUrlByShortUrl: URL에 대한 요청 수를 계산한다.")
-    @Test
-    void findOriginUrlByShortUrl_AddCount() {
-        // given
-        final ShortUrl shortUrl = shortUrlRepository.save(new ShortUrl("https://www.naver.com/", "B1Az9cZP", 1L));
-
-        // when
-        shortUrlService.findOriginUrlByShortUrl(shortUrl.getShortUrl());
-        shortUrlService.findOriginUrlByShortUrl(shortUrl.getShortUrl());
-        shortUrlService.findOriginUrlByShortUrl(shortUrl.getShortUrl());
-
-        // than
-        ShortUrl actual = shortUrlRepository.findByOriginUrl(shortUrl.getOriginUrl()).get();
-        assertAll(
-                () -> assertThat(actual.getOriginUrl()).isEqualTo(shortUrl.getOriginUrl()),
-                () -> assertThat(actual.getRequestCount()).isEqualTo(4L)
-        );
-    }
 
     @DisplayName("findOriginUrlByShortUrl: 짧게 만든 URL이 존재하지 않을 때 예외 처리")
     @Test
