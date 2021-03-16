@@ -11,15 +11,11 @@ import shorturl.shortener.dto.OriginUrlResponse;
 import shorturl.shortener.dto.ShortUrlRequest;
 import shorturl.shortener.dto.ShortUrlResponse;
 import shorturl.shortener.exception.URLNotFoundException;
-import shorturl.shortener.repository.ShortUrlRepository;
 
 class ShortUrlServiceTest extends ServiceTest {
 
     @Autowired
     private ShortUrlService shortUrlService;
-
-    @Autowired
-    private ShortUrlRepository shortUrlRepository;
 
     @DisplayName("create: url을 입력하면 짧게 만들어 준다.")
     @Test
