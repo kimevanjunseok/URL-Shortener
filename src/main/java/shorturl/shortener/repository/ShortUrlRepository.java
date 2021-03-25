@@ -1,5 +1,7 @@
 package shorturl.shortener.repository;
 
+import javax.annotation.Resource;
+
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
@@ -14,11 +16,8 @@ public class ShortUrlRepository {
     private static final String SHORT_URL = "ShortUrlKey";
     private static final String REQUEST_COUNT = "RequestCount";
 
-    private final HashOperations<String, String, Object> hashOperations;
-
-    public ShortUrlRepository(final RedisTemplate<String, Object> redisTemplate) {
-        this.hashOperations = redisTemplate.opsForHash();
-    }
+    @Resource(name = "redisTemplate")
+    private HashOperations<String, String, Object> hashOperations;
 
     public ShortUrl findByOriginUrl(final String url) {
         return (ShortUrl) hashOperations.get(ORIGIN_URL, url);
