@@ -1,5 +1,8 @@
 package shorturl.shortener.acceptance;
 
+import java.util.Objects;
+import java.util.Set;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,18 +13,15 @@ import shorturl.shortener.dto.ShortUrlResponse;
 
 public class ShortUrlAcceptanceTest extends AcceptanceTest {
 
-    private static final String ORIGIN_URL = "OriginUrlKey";
-    private static final String SHORT_URL = "ShortUrlKey";
-    private static final String REQUEST_COUNT = "RequestCount";
-
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
 
     @AfterEach
     void teardown() {
-        redisTemplate.delete(ORIGIN_URL);
-        redisTemplate.delete(SHORT_URL);
-        redisTemplate.delete(REQUEST_COUNT);
+        Set<String> keys = redisTemplate.keys("*");
+        for (final String key : Objects.requireNonNull(keys)) {
+            redisTemplate.delete(key);
+        }
     }
 
     @Test

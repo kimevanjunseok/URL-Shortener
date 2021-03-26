@@ -3,6 +3,9 @@ package shorturl.shortener.service;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.Objects;
+import java.util.Set;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,10 +19,6 @@ import shorturl.shortener.exception.URLNotFoundException;
 
 class ShortUrlServiceTest extends ServiceTest {
 
-    private static final String ORIGIN_URL = "OriginUrlKey";
-    private static final String SHORT_URL = "ShortUrlKey";
-    private static final String REQUEST_COUNT = "RequestCount";
-
     @Autowired
     private ShortUrlService shortUrlService;
 
@@ -28,9 +27,10 @@ class ShortUrlServiceTest extends ServiceTest {
 
     @AfterEach
     void teardown() {
-        redisTemplate.delete(ORIGIN_URL);
-        redisTemplate.delete(SHORT_URL);
-        redisTemplate.delete(REQUEST_COUNT);
+        Set<String> keys = redisTemplate.keys("*");
+        for (final String key : Objects.requireNonNull(keys)) {
+            redisTemplate.delete(key);
+        }
     }
 
     @DisplayName("create: url을 입력하면 짧게 만들어 준다.")
@@ -83,7 +83,6 @@ class ShortUrlServiceTest extends ServiceTest {
         // than
         assertThat(expect.getOriginUrl()).isEqualTo(shortUrlResponse.getOriginUrl());
     }
-
 
     @DisplayName("findOriginUrlByShortUrl: 짧게 만든 URL이 존재하지 않을 때 예외 처리")
     @Test
