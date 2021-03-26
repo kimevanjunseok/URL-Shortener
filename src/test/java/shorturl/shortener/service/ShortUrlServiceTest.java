@@ -7,20 +7,31 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 
 import shorturl.shortener.dto.OriginUrlResponse;
 import shorturl.shortener.dto.ShortUrlRequest;
 import shorturl.shortener.dto.ShortUrlResponse;
 import shorturl.shortener.exception.URLNotFoundException;
-import shorturl.shortener.repository.ShortUrlRepository;
 
 class ShortUrlServiceTest extends ServiceTest {
+
+    private static final String ORIGIN_URL = "OriginUrlKey";
+    private static final String SHORT_URL = "ShortUrlKey";
+    private static final String REQUEST_COUNT = "RequestCount";
 
     @Autowired
     private ShortUrlService shortUrlService;
 
     @Autowired
-    private ShortUrlRepository shortUrlRepository;
+    private RedisTemplate<String, Object> redisTemplate;
+
+    @AfterEach
+    void teardown() {
+        redisTemplate.delete(ORIGIN_URL);
+        redisTemplate.delete(SHORT_URL);
+        redisTemplate.delete(REQUEST_COUNT);
+    }
 
     @DisplayName("create: url을 입력하면 짧게 만들어 준다.")
     @Test
