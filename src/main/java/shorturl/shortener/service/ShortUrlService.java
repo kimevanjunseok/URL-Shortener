@@ -23,11 +23,6 @@ public class ShortUrlService {
     }
 
     public ShortUrlResponse create(final ShortUrlRequest shortUrlRequest) {
-        final ShortUrl existUrl = shortURLRepository.findByOriginUrl(shortUrlRequest.getUrl());
-        if (existUrl != null) {
-            return ShortUrlResponse.of(existUrl);
-        }
-
         final long id = shortURLRepository.size() + 1L;
         final String shortenUrl = urlEncoder.encoding(id);
         final ShortUrl shortUrl = shortURLRepository.save(new ShortUrl(id, shortUrlRequest.getUrl(), shortenUrl));

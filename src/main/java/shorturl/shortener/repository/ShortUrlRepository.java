@@ -3,7 +3,6 @@ package shorturl.shortener.repository;
 import javax.annotation.Resource;
 
 import org.springframework.data.redis.core.HashOperations;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 
 import shorturl.shortener.domain.ShortUrl;
@@ -19,16 +18,15 @@ public class ShortUrlRepository {
     @Resource(name = "redisTemplate")
     private HashOperations<String, String, Object> hashOperations;
 
-    public ShortUrl findByOriginUrl(final String url) {
-        return (ShortUrl) hashOperations.get(ORIGIN_URL, url);
-    }
-
     public long size() {
         return hashOperations.size(SHORT_URL);
     }
 
     public ShortUrl save(final ShortUrl shortUrl) {
-        hashOperations.put(ORIGIN_URL, shortUrl.getOriginUrl(), shortUrl);
+        final Boolean hasOriginUrl = hashOperations.putIfAbsent(ORIGIN_URL, shortUrl.getOriginUrl(), shortUrl);
+        if (!hasOriginUrl) {
+            return (ShortUrl) hashOperations.get(ORIGIN_URL, shortUrl.getOriginUrl());
+        }
         hashOperations.put(SHORT_URL, shortUrl.getShortUrl(), shortUrl);
         hashOperations.put(REQUEST_COUNT, shortUrl.getShortUrl(), 1L);
         return shortUrl;
