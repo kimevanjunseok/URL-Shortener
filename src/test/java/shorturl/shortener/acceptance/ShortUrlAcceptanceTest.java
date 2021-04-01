@@ -4,6 +4,7 @@ import java.util.Objects;
 import java.util.Set;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -24,6 +25,7 @@ public class ShortUrlAcceptanceTest extends AcceptanceTest {
         }
     }
 
+    @DisplayName("manageShortUrl: 사용자가 Url을 입력해서 ㄴShortUrl로 redirect까지 하는 과정")
     @Test
     void manageShortUrl() {
         // ShortUrl 생성
